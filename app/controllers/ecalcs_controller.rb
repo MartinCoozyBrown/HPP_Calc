@@ -5,6 +5,7 @@ class EcalcsController < ApplicationController
   end
 
   def create
+    @user = User.find session[:user_id]
    #file_data is the file. if it is file, then will use read method. if path with go to path and then use read method 
     file_data=params[:file]
     if file_data.respond_to?(:read)
@@ -25,13 +26,14 @@ class EcalcsController < ApplicationController
       row['usage']= row['usage'].to_string
       row['units']= row['units'].to_string
       row['cost']=row['cost'].to_i
-      Ecalc.create row  
+      @user.ecalcs.create row
     end
   end
   #calculates total costs with static rate(rate is .07)
   def cost_static
-    usagesum=Ecalc.sum('usage')
-    @cost_static= :usagesum * '.07'
+    ecalcs = @user.ecalcs.all
+    usagesum=ecalcs.sum('usage')
+    usagesum * 0.07
   end
 
   def cost_dynamic
