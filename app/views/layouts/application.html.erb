@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HourlyPricingApp</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+
+
+<body>
+<img src="DeltaLumin_logo_color.jpg" alt="logo" />
+<p>HPP Calculator</p>
+<%= link_to "Login", login_path %>
+<%= link_to "Sign Up", signup_path %>
+
+<%= link_to "Upload Energy Data", upload_path %>
+
+<%= yield %>
+
+</body>
+</html>

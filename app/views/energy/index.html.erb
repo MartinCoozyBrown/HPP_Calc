@@ -1,0 +1,12 @@
+<h1>Energy#index</h1>
+<h2>Import CSV of Data</h2>
+
+<%= form_tag '/import' do %>
+
+	<%= file_field_tag :file %>
+	<br />
+	<%= submit_tag "Import" %>
+<%end%>
+
+
+

@@ -1,0 +1,14 @@
+
+<h2>login</h1>
+<% if notice %>
+	<p>
+		<%= notice %>
+	</p>
+<% end %>
+<%= form_tag authenticate_path,{method: "post"} do %>
+	<input type="text" name="email" placeholder="Email Address"/>
+	<br />
+	<input type="password" name="password" placeholder="Enter your password" />
+	<br />
+	<button type="submit">Log in </button>
+<% end %>
