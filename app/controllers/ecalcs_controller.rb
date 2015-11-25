@@ -18,6 +18,10 @@ class EcalcsController < ApplicationController
     csv=CSV.new(xml_contents.to_s)
     #csv.to_a.map { |row| row.to_hash }
     #converted CSV into an aray of hashes
+    savings_result = {
+      good: 0,
+      bad: 0
+    }
     csv.each do |row|
     #convert string to date time objects(start and end times)
       row['type']= row['type'].to_string
@@ -26,6 +30,7 @@ class EcalcsController < ApplicationController
       row['usage']= row['usage'].to_string
       row['units']= row['units'].to_string
       row['cost']=row['cost'].to_i
+      rate = HourlyRate.where date: row['start_time'], time: 'some time'
       @user.ecalcs.create row
     end
   end
