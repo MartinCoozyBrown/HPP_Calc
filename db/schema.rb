@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 20151125024312) do
   create_table "hourly_rates", force: :cascade do |t|
     t.date     "date"
     t.time     "time"
-    t.integer  "rate"
+    t.float    "rate"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

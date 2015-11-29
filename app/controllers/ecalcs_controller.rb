@@ -5,7 +5,6 @@ class EcalcsController < ApplicationController
   end
 
   def create
-    @user = User.find session[:user_id]
    #file_data is the file. if it is file, then will use read method. if path with go to path and then use read method 
     file_data=params[:file]
     if file_data.respond_to?(:read)
@@ -15,13 +14,9 @@ class EcalcsController < ApplicationController
     else
         logger.error "bla error"
     end
-    csv=CSV.new(xml_contents.to_s)
+    csv=CSV.new(xml_contents.to_s, headers: true, header_converters: :all)
     #csv.to_a.map { |row| row.to_hash }
     #converted CSV into an aray of hashes
-    savings_result = {
-      good: 0,
-      bad: 0
-    }
     csv.each do |row|
     #convert string to date time objects(start and end times)
       row['type']= row['type'].to_string
@@ -30,15 +25,14 @@ class EcalcsController < ApplicationController
       row['usage']= row['usage'].to_string
       row['units']= row['units'].to_string
       row['cost']=row['cost'].to_i
-      rate = HourlyRate.where date: row['start_time'], time: 'some time'
-      @user.ecalcs.create row
+      Ecalc.create row  
     end
   end
-  #calculates total costs with static rate(rate is .07)
+
   def cost_static
-    ecalcs = @user.ecalcs.all
-    usagesum=ecalcs.sum('usage')
-    usagesum * 0.07
+    rate= '.07'
+    usagesum=Ecalc.sum('usage')
+    cost_static= :rate*:usagesum
   end
 
   def cost_dynamic

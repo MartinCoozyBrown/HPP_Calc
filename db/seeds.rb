@@ -12,9 +12,9 @@ require 'chronic'
 csv_text = File.read(Rails.root.join('lib', 'seeds', 'HourlyRate.OCT.csv'))
 csv = CSV.parse(csv_text, :headers => true)
 csv.each do |row|
-	row['date'] = # parse to date
-	row['time'] = #parse to time
-	row['rate'].to_f # to float
+	row['date'] = Chronic.parse("#{row['date']}")
+	row['time'] = Chronic.parse("#{row['time']}")
+	row['rate'] = row['rate'].to_f
 	HourlyRate.create row
 	puts row.to_hash
 end
