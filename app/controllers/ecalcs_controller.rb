@@ -32,10 +32,22 @@ class EcalcsController < ApplicationController
   def cost_static
     rate= '.07'
     usagesum=Ecalc.sum('usage')
-    cost_static= :rate*:usagesum
+    :rate*:usagesum
   end
 
   def cost_dynamic
+    usage_dynamic= Ecalc.each do |row|
+      row['start_time']
+      row['usage']
+      usage_dynamic.save
+    end
+    usage_rate= HourlyRate.each do |row|
+      row['date']
+      row['time']
+      row['rate']
+      usage_rate.save
+    end
+    #cost_dynamic= 
   end
 
 

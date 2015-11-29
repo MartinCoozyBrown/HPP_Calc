@@ -15,7 +15,7 @@ csv.each do |row|
 	row['date'] = Chronic.parse("#{row['date']}")
 	row['time'] = Chronic.parse("#{row['time']}")
 	row['rate'] = row['rate'].to_f
-	HourlyRate.create row
+	HourlyRate.create row.to_hash
 	puts row.to_hash
 end
 
