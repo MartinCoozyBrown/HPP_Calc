@@ -17,6 +17,7 @@ class EcalcsController < ApplicationController
     csv=CSV.new(xml_contents.to_s, headers: true, header_converters: :all)
     #csv.to_a.map { |row| row.to_hash }
     #converted CSV into an aray of hashes
+    savings_by_hour =[]
     csv.each do |row|
     #convert string to date time objects(start and end times)
       row['type']= row['type'].to_string
@@ -25,7 +26,15 @@ class EcalcsController < ApplicationController
       row['usage']= row['usage'].to_string
       row['units']= row['units'].to_string
       row['cost']=row['cost'].to_i
-      Ecalc.create row  
+      #Ecalc.create row  
+      usage= Ecalc.create row.to_hash
+      #saving for later use
+      compare_to = HourlyRate.where time: usage.time, date: usage.date
+      #make sure those are the attributes names
+      result = usage.usage *compare_to.rate
+      #the savings calculation
+      savings_by_hour.push result
+      #push the result into array for later
     end
   end
 
@@ -35,17 +44,17 @@ class EcalcsController < ApplicationController
     :rate*:usagesum
   end
 
-  def cost_dynamic
-    usage_dynamic= Ecalc.each do |row|
-      row['start_time']
-      row['usage']
-      usage_dynamic.save
-    end
-    usage_rate= HourlyRate.each do |row|
-      row['date']
-      row['time']
-      row['rate']
-      usage_rate.save
+  # def cost_dynamic
+  #   usage_dynamic= Ecalc.each do |row|
+  #     row['start_time'] 
+  #     row['usage']
+  #     usage_dynamic.save
+  #   end
+  #   usage_rate= HourlyRate.each do |row|
+  #     row['date']
+  #     row['time']
+  #     row['rate']
+  #     usage_rate.save
     end
     #cost_dynamic= 
   end
