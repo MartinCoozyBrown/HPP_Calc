@@ -41,7 +41,7 @@ class EcalcsController < ApplicationController
   def cost_static
     rate= '.07'
     usagesum=Ecalc.sum('usage')
-    :rate*:usagesum
+    cost_static= :rate*:usagesum
   end
 
   # def cost_dynamic
@@ -55,9 +55,9 @@ class EcalcsController < ApplicationController
   #     row['time']
   #     row['rate']
   #     usage_rate.save
-    end
+    #end 
     #cost_dynamic= 
-  end
+  #end
 
 
 
