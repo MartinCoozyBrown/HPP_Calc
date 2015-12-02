@@ -13,11 +13,16 @@ class EcalcsController < ApplicationController
       xml_contents= File.read(file_data.path)
     else
         logger.error "bla error"
+        redirect_to :root
     end
+    p file_data
+    p xml_contents
+    current_user = User.find session[:user_id]
     csv=CSV.new(xml_contents.to_s, headers: true, header_converters: :all)
     #csv.to_a.map { |row| row.to_hash }
     #converted CSV into an aray of hashes
     savings_by_hour =[]
+    @energy_usage = 0
     csv.each do |row|
     #convert string to date time objects(start and end times)
       row['type']= row['type'].to_string
@@ -27,8 +32,13 @@ class EcalcsController < ApplicationController
       row['units']= row['units'].to_string
       row['cost']=row['cost'].to_i
       #Ecalc.create row  
-      usage= Ecalc.create row.to_hash
+      usage= Ecalc.new row.to_hash
+      usage.user = current_user
+      usage.save
+      p usage
+      p row
       #saving for later use
+      @energy_usage += row['usage']
       compare_to = HourlyRate.where time: usage.time, date: usage.date
       #make sure those are the attributes names
       result = usage.usage *compare_to.rate
@@ -36,6 +46,8 @@ class EcalcsController < ApplicationController
       savings_by_hour.push result
       #push the result into array for later
     end
+    @whatever = current_user.ecalcs.sum('usage')
+    p @whatever
   end
 
   def cost_static
